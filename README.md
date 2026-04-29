@@ -8,12 +8,12 @@ Build a **bootable live ISO** from the same `Setup/Kickstarts` and assets as [Fe
 
 ## Quick start
 
-1. Set **`Setup/config.yml`** (`fedora_version`, `include_pxeboot_files` if you use `Prepare_Web_Files.py`).
+1. Set **`Setup/config.yml`** and repo **`config.yml`** (`fedora_version` / `Fedora_Version`, paths, PXE). **`./Update_Remix_Config.sh`** walks through all fields interactively.
 2. From the repo root:
 
-   `./Build_LiveMedia_Physical.sh`
+   **`./Verify_Build_LiveMedia.sh`** (recommended) — shows both YAML versions, optionally **updates Fedora release in both files**, checks for **`fedora-livemedia-builder`** locally, then offers to run **`./Build_LiveMedia.sh`**.
 
-   (optional: `-k` kickstart, `-v` version — see `Build_LiveMedia_Physical.sh -h`)
+   Or build without the verifier: **`./Build_LiveMedia_Physical.sh`** on the host (optional: `-k` kickstart, `-v` version — see `-h`).
 
 3. Pick up the `.iso` from **`/livemedia-creator/result/`** when the run finishes.
 
@@ -25,9 +25,25 @@ Manual equivalent: `cd Setup && sudo python3 ./Prepare_LiveMedia_Build.py`, then
 
 **If `dracut` fails** during the ISO step, check `program.log` under the `lmc-work-*` tree in `/livemedia-creator/tmp` for that run.
 
-## Container (optional)
+## Container (Podman)
 
-`Build_LiveMedia.sh` is Podman-based; output mount is `/livemedia-creator`. You need a builder image that has **lorax** and can run the script in that tree (not the old livecd-creator image).
+Same layout as [RemixBuilder](https://github.com/tmichett/RemixBuilder) (livecd-creator), but this image runs **livemedia-creator**.
+
+| File | Purpose |
+|------|---------|
+| `Verify_Build_LiveMedia.sh` | Pre-flight: optional **Fedora version** for both configs, PXE prompt, image check, then **`Build_LiveMedia.sh`** |
+| `Containerfile` | `fedora:${FEDORA_VERSION}` + lorax, anaconda, pykickstart, httpd, systemd, etc. |
+| `entrypoint.sh` | `Prepare_Web_Files.py` → `Prepare_LiveMedia_Build.py` → `LiveMedia_Enhanced_Build_Script.sh` |
+| `build.sh` / `push.sh` | Build and push `ghcr.io/<owner>/fedora-livemedia-builder:<ver>` from `config.yml` |
+| `ssh_config` | Git SSH using `/root/github_id` in the container |
+| `Build_LiveMedia.sh` | Run the container (mounts repo, output dir, key) |
+
+From repo root:
+
+1. `./build.sh` — builds the image tag declared in `config.yml` (`Container_Properties`).
+2. `./Verify_Build_LiveMedia.sh` or `./Build_LiveMedia.sh` — verify then build, or build directly (detached log follow by default, or `-a` for interactive).
+
+Output on the host stays under the directory you set as `Fedora_Remix_Location` (mounted at `/livemedia-creator` in the container).
 
 ## Config files
 

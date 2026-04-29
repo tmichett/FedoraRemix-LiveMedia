@@ -96,10 +96,10 @@ def main():
     """Set up the system and populate /livemedia-creator/FedoraRemix for livemedia-creator."""
     ensure_root()
 
-    # lorax provides /usr/bin/livemedia-creator
+    # lorax provides livemedia-creator; anaconda is required on PATH for --no-virt installs
     major = fedora_major_version()
     # pykickstart provides ksflatten (resolve %include before livemedia-creator / anaconda)
-    remix_packages = ["vim", "lorax", "pykickstart", "sshfs"]
+    remix_packages = ["vim", "lorax", "pykickstart", "anaconda", "sshfs"]
     if major is not None and major >= 42:
         remix_packages.append("util-linux-script")
 
@@ -139,7 +139,7 @@ def main():
     print(f"Files copied to {livemedia_root}:")
     print("  - Kickstart files and snippets")
     print("  - Prepare_LiveMedia_Build.py, Prepare_Web_Files.py")
-    print("  - LiveMedia_Enhanced_Build_Script.sh (lorax / livemedia-creator)")
+    print("  - LiveMedia_Enhanced_Build_Script.sh (lorax / livemedia-creator; anaconda for --no-virt)")
     print("  - Remix_Build_Script.sh (minimal wrapper)")
     print("  - config.yml")
     print("")

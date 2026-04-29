@@ -361,6 +361,14 @@ if [ "$(uname -s)" = "Linux" ]; then
     VOL_Z=",z"
 fi
 
+# Kickstart name for systemd services (PassEnvironment can miss -e alone); same idea as RemixBuilder/Build_Remix.sh
+KICKSTART_FILE=$(mktemp)
+echo "$SELECTED_KICKSTART" > "$KICKSTART_FILE"
+cleanup_kickstart_file() {
+    rm -f "$KICKSTART_FILE"
+}
+trap cleanup_kickstart_file EXIT
+
 # After `podman run -d`, stream /tmp/entrypoint.log in the foreground (same terminal).
 # Stops when /tmp/entrypoint-status exists (or legacy /tmp/entrypoint-completed) or
 # remix-builder / livemedia-builder .service fails, or a max wait is exceeded.
@@ -439,7 +447,11 @@ REMIX_STREAM
 RUN_ARGS=("--replace" "--name" "$CONTAINER_NAME" "--systemd=always" "--privileged" "${EXTRA_ARGS[@]}"
   "-e" "REMIX_KICKSTART=$SELECTED_KICKSTART"
   "-e" "REMIX_INCLUDE_PXEBOOT=$INCLUDE_PXEBOOT"
-  "-v" "$SSH_KEY_LOCATION:/root/github_id:ro${VOL_Z}" "-v" "$FEDORA_REMIX_LOCATION:/livemedia-creator:rw${VOL_Z}" "-v" "$SOURCE_DIR:/root/workspace:rw${VOL_Z}" "$IMAGE_NAME")
+  "-v" "$SSH_KEY_LOCATION:/root/github_id:ro${VOL_Z}"
+  "-v" "$FEDORA_REMIX_LOCATION:/livemedia-creator:rw${VOL_Z}"
+  "-v" "$SOURCE_DIR:/root/workspace:rw${VOL_Z}"
+  "-v" "$KICKSTART_FILE:/tmp/remix_kickstart.txt:ro${VOL_Z}"
+  "$IMAGE_NAME")
 
 if [ "$ATTACH_MODE" = "1" ]; then
     echo "Interactive attach: build output is not auto-streamed; use tail/journal in another shell if needed."

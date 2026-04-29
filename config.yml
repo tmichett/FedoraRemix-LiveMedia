@@ -5,7 +5,7 @@
 # You must build/publish a builder image that runs LiveMedia_Enhanced_Build_Script
 # in /livemedia-creator/FedoraRemix (not the old livecd-creator image).
 Container_Properties:
-  Fedora_Version: "43"
+  Fedora_Version: "44"
   SSH_Key_Location: "~/.ssh/github_id"
   Fedora_Remix_Location: "/home/travis/Remix_Builder"
   GitHub_Registry_Owner: "tmichett"

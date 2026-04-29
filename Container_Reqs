@@ -1,0 +1,29 @@
+Fedora Remix LiveMedia — container requirements (implemented by Containerfile + entrypoint.sh)
+
+Goal
+  Podman image that runs the same flow as a physical host:
+    cd ~/workspace/Setup
+    python3 Prepare_Web_Files.py
+    python3 Prepare_LiveMedia_Build.py
+    cd /livemedia-creator/FedoraRemix
+    ./LiveMedia_Enhanced_Build_Script.sh
+
+Base image
+  fedora:${FEDORA_VERSION} (build-arg from config.yml via ./build.sh)
+
+RPMs (high level)
+  lorax, pykickstart — livemedia-creator / ksflatten
+  anaconda — required on PATH for livemedia-creator --no-virt (directory/image install without qemu)
+  httpd, rsync, python3-pyyaml — Prepare_Web_Files.py
+  sshfs — kickstarts / tooling
+  systemd — PID 1 for loop devices + entrypoint service
+  osbuild-selinux — load policy in entrypoint before anaconda chroot relabel
+  util-linux-script — dependency parity with Prepare_LiveMedia_Build on newer Fedora
+
+Runtime mounts (see Build_LiveMedia.sh)
+  Repo → /root/workspace
+  Host output dir → /livemedia-creator
+  SSH key → /root/github_id (see ssh_config)
+
+Image name
+  ghcr.io/<GitHub_Registry_Owner>/fedora-livemedia-builder:<Fedora_Version>
