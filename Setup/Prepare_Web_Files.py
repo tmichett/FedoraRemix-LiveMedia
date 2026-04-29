@@ -1,0 +1,287 @@
+#!/usr/bin/env python3
+
+import os
+import subprocess
+import shutil
+import urllib.request
+import sys
+import yaml
+
+def parse_bool(value):
+    """Parse common boolean string values into True/False/None."""
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return bool(value)
+
+    value_str = str(value).strip().lower()
+    if value_str in {"y", "yes", "true", "1", "on"}:
+        return True
+    if value_str in {"n", "no", "false", "0", "off"}:
+        return False
+    return None
+
+def prompt_yes_no(prompt, default=True):
+    """Prompt for yes/no and return bool."""
+    suffix = "[Y/n]" if default else "[y/N]"
+    while True:
+        response = input(f"{prompt} {suffix}: ").strip()
+        if not response:
+            return default
+        parsed = parse_bool(response)
+        if parsed is not None:
+            return parsed
+        print("Please answer yes or no.")
+
+def resolve_include_pxeboot_files(config):
+    """
+    Determine whether PXEBoot files should be downloaded.
+    Priority:
+    1) REMIX_INCLUDE_PXEBOOT environment variable
+    2) include_pxeboot_files in config.yml
+    3) interactive prompt (if terminal available)
+    4) default True in non-interactive mode (backward compatible)
+    """
+    env_value = parse_bool(os.environ.get("REMIX_INCLUDE_PXEBOOT"))
+    if env_value is not None:
+        return env_value
+
+    config_value = parse_bool(config.get("include_pxeboot_files"))
+    if config_value is not None:
+        return config_value
+
+    if sys.stdin.isatty():
+        return prompt_yes_no("Include PXEBoot files in web assets?", default=True)
+
+    print("include_pxeboot_files is not defined; defaulting to enabled.")
+    return True
+
+def run_command(command, shell=False):
+    """Run a shell command and return the output"""
+    cmd_str = ' '.join(command) if isinstance(command, list) else command
+    print(f"Running command: {cmd_str}")
+    try:
+        if shell:
+            result = subprocess.run(command, shell=True, check=True, text=True, capture_output=True)
+        else:
+            result = subprocess.run(command, check=True, text=True, capture_output=True)
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command: {e}")
+        print(f"Command output: {e.stdout}")
+        print(f"Error output: {e.stderr}")
+        sys.exit(1)
+
+def is_root():
+    """Check if the script is running as root"""
+    return os.geteuid() == 0
+
+def ensure_root():
+    """Ensure the script is running as root"""
+    if not is_root():
+        print("This script must be run as root. Please use sudo.")
+        sys.exit(1)
+
+def load_config(config_file="config.yml"):
+    """Load configuration from YAML file"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(script_dir, config_file)
+    
+    if not os.path.exists(config_path):
+        print(f"Error: Configuration file {config_path} not found")
+        sys.exit(1)
+    
+    try:
+        with open(config_path, 'r') as file:
+            config = yaml.safe_load(file)
+        return config
+    except yaml.YAMLError as e:
+        print(f"Error parsing YAML configuration file: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error reading configuration file: {e}")
+        sys.exit(1)
+
+def install_packages(packages):
+    """Install packages using dnf/yum"""
+    if isinstance(packages, str):
+        packages = [packages]
+    print(f"Installing packages: {', '.join(packages)}")
+    run_command(["dnf", "install", "-y"] + packages)
+
+def create_directory(path, mode=0o755):
+    """Create a directory with specified permissions"""
+    if not os.path.exists(path):
+        print(f"Creating directory {path}")
+        os.makedirs(path, mode=mode)
+    else:
+        print(f"Directory {path} already exists")
+
+def rsync(src, dest):
+    """Use rsync to copy files as Ansible's synchronize module would"""
+    if not os.path.exists(src):
+        print(f"Error: Source path {src} does not exist")
+        return False
+        
+    print(f"Running rsync from {src} to {dest}")
+    # -a: archive mode (preserves permissions, etc.)
+    # -v: verbose
+    cmd = ["rsync", "-av", src, dest]
+    run_command(cmd)
+    return True
+
+def clone_git_repo(repo_url, dest):
+    """Clone a git repository"""
+    print(f"Cloning {repo_url} to {dest}")
+    parent_dir = os.path.dirname(dest)
+    if not os.path.exists(parent_dir):
+        create_directory(parent_dir)
+        
+    if os.path.exists(dest):
+        print(f"Directory {dest} already exists, updating repository...")
+        current_dir = os.getcwd()
+        try:
+            os.chdir(dest)
+            run_command(["git", "pull"])
+        finally:
+            os.chdir(current_dir)
+        return
+    
+    cmd = ["git", "clone", repo_url, dest]
+    run_command(cmd)
+
+def download_file(url, dest):
+    """Download a file from URL to destination"""
+    print(f"Downloading {url} to {dest}")
+    try:
+        parent_dir = os.path.dirname(dest)
+        if not os.path.exists(parent_dir):
+            create_directory(parent_dir)
+            
+        urllib.request.urlretrieve(url, dest)
+    except Exception as e:
+        print(f"Error downloading {url}: {e}")
+        sys.exit(1)
+
+def enable_service(service_name):
+    """Enable and start a system service"""
+    print(f"Enabling and starting {service_name} service")
+    run_command(["systemctl", "enable", service_name])
+    run_command(["systemctl", "start", service_name])
+
+def main():
+    """Main function to setup system for Fedora Remix file hosting"""
+    # Ensure we're running as root
+    ensure_root()
+    
+    # Load configuration
+    config = load_config()
+    fedora_boot_files = config['fedora_boot_files']
+    fedora_version = config['fedora_version']
+    web_root = config['web_root']
+    include_pxeboot_files = resolve_include_pxeboot_files(config)
+
+    print(f"PXEBoot files enabled: {include_pxeboot_files}")
+    
+    # Install required packages
+    install_packages("httpd")
+    
+    # Create web directory
+    create_directory(web_root)
+    
+    # Copy Files to Web Directory 
+    # This should create /var/www/html/files/
+    if os.path.exists("./files"):
+        rsync("./files", f"{web_root}/")
+    else:
+        print(f"Warning: ./files directory not found")
+    
+    # Copy Boot Theme to Web Directory
+    # This should create /var/www/html/tm-fedora-remix/
+    boot_theme_path = "./files/boot/tm-fedora-remix"
+    if os.path.exists(boot_theme_path):
+        rsync(boot_theme_path, f"{web_root}/")
+    else:
+        print(f"Warning: {boot_theme_path} not found")
+    
+    # Create Apache Configuration
+    apache_conf = "./files/httpd_index.conf"
+    if os.path.exists(apache_conf):
+        create_directory("/etc/httpd/conf.d")
+        rsync(apache_conf, "/etc/httpd/conf.d/")
+    else:
+        print(f"Warning: {apache_conf} file not found")
+    
+    # Clone Git repositories
+    clone_git_repo("https://github.com/tmichett/FedoraRemixCustomize.git", f"{web_root}/FedoraRemixCustomize")
+    clone_git_repo("https://github.com/tmichett/PXEServer.git", f"{web_root}/PXEServer")
+    
+    if include_pxeboot_files:
+        # Create PXE Boot Files directory
+        create_directory(f"{web_root}/FedoraRemixPXE")
+
+        # Download Boot Images for PXEBoot
+        for file in fedora_boot_files:
+            url = f"https://download.fedoraproject.org/pub/fedora/linux/releases/{fedora_version}/Server/x86_64/os/images/pxeboot/{file}"
+            dest = f"{web_root}/FedoraRemixPXE/{file}"
+            download_file(url, dest)
+    else:
+        print("Skipping PXEBoot files download (disabled by configuration).")
+    
+    # Optional: YAD (same layout as Fedora_Remix repo: YAD/ next to Setup/)
+    _script_dir = os.path.dirname(os.path.abspath(__file__))
+    _repo_root = os.path.dirname(_script_dir)
+    yad_root = os.path.join(_repo_root, "YAD")
+    if os.path.isdir(yad_root):
+        scripts_sub = os.path.join(yad_root, "scripts")
+        if os.path.isdir(scripts_sub):
+            rsync(scripts_sub, f"{web_root}/")
+        for item in ("Fedora_Remix_Apps.desktop", "Fedora_Remix_Customize.sh"):
+            src = os.path.join(yad_root, item)
+            if os.path.exists(src):
+                rsync(src, f"{web_root}/")
+    else:
+        print(
+            "Info: Optional YAD/ not found next to this repo (copy from "
+            "Fedora_Remix if you want YAD web assets; not required for ISO builds)"
+        )
+    
+    # Copy VSCode Extensions
+    vscode_dir = "files/VSCode"
+    if os.path.exists(vscode_dir):
+        rsync(vscode_dir, f"{web_root}/")
+        # Fix permissions for web server access
+        run_command(f"chmod 644 {web_root}/VSCode/*.vsix", shell=True)
+    else:
+        print(f"Warning: {vscode_dir} directory not found")
+    
+    # Copy UDP Cast
+    udpcast_file = "files/udpcast-20230924-1.x86_64.rpm"
+    if os.path.exists(udpcast_file):
+        rsync(udpcast_file, f"{web_root}/")
+    else:
+        print(f"Warning: {udpcast_file} not found")
+    
+    # Copy Kickstart Python Fix
+    kickstart_file = "files/Fixes/kickstart.py"
+    if os.path.exists(kickstart_file):
+        rsync(kickstart_file, f"{web_root}/")
+    else:
+        print(f"Warning: {kickstart_file} not found")
+    
+    # Copy imgcreate fs.py Fix (for /sys unmount issue in systemd containers)
+    fs_file = "files/Fixes/fs.py"
+    if os.path.exists(fs_file):
+        rsync(fs_file, f"{web_root}/")
+    else:
+        print(f"Warning: {fs_file} not found")
+    
+    # Enable HTTPD Service
+    enable_service("httpd")
+    
+    print("Setup complete!")
+
+if __name__ == "__main__":
+    main()

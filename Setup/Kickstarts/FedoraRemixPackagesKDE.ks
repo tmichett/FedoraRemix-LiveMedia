@@ -1,0 +1,197 @@
+## Travis's Custom Packages
+## --ignoremissing: util-linux-script exists only on Fedora 42+ (script ships in util-linux on F41)
+%packages --ignoremissing
+## Fix Branding and Logos
+#-fedora-logos
+#-fedora-release*
+#generic-logos
+#generic-release
+#generic-release-notes
+## End Branding and Logos
+vim
+sshfs
+@Virtualization
+guestfs-tools
+python3-libguestfs
+@RPM Development Tools
+@Development Tools
+createrepo
+rclone
+isomd5sum
+rpm-sign
+git-lfs
+python3-pip
+vim-enhanced
+dbus-x11
+google-chrome-stable
+ImageMagick
+mock
+git
+vlc
+## VLC Plugin conflicts removing plugin
+-vlc-plugins-freeworld  
+code
+tmux
+ntfs-3g
+wget
+curl
+unzip
+fedora-remix-logos
+gh
+syslinux-perl
+yad
+pykickstart
+terminator
+sshuttle
+cockpit*
+meson
+ninja-build
+pinentry
+make
+genisoimage
+xorriso
+libxml2
+mc
+fuse-sshfs
+yum-utils
+cargo
+golang
+
+## Image Editing and Manipulation
+inkscape
+gimp
+krita
+netpbm-progs
+scribus
+
+## Video Editing and Manipulation
+kdenlive
+
+## Container Tools
+buildah
+skopeo
+podman-machine
+
+
+## Telecon and Media
+obs-studio
+
+## Remove GNOME packages that might be pulled in
+-gnome-tour
+-gnome-shell
+-gnome-shell-extension*
+-nautilus
+-gdm
+-gnome-control-center
+-gnome-terminal
+-@gnome-desktop
+
+## Note: KDE Desktop packages are included via fedora-kde-common.ks
+## Only add specific KDE packages not in the base KDE groups here if needed
+
+## Course and Classroom Building DLE-DOIT
+python3-devel
+gcc
+python3
+rsync
+jq
+yq
+tree
+pre-commit
+uv
+toolbox
+python-pyyaml
+
+## Speech Synthasis
+speech-dispatcher
+speech-dispatcher-utils
+
+## Ansible Roles
+linux-system-roles
+sshpass
+
+## For Wifi and Networking
+@hardware-support
+NetworkManager-wifi 
+iwl*
+usbutils ## provides lsusb
+inxi
+pciutils ## Provides lspci
+wireguard-tools
+
+## Other Wifi Packages
+atheros-firmware
+b43-fwcutter
+b43-openfwwf
+brcmfmac-firmware
+iwlegacy-firmware
+iwlwifi-dvm-firmware
+iwlwifi-mvm-firmware
+libertas-firmware
+mt7xxx-firmware
+nxpwireless-firmware
+realtek-firmware
+tiwilink-firmware
+atmel-firmware
+zd1211-firmware
+
+# Web Browsers
+firefox
+chromium
+
+## Note: LibreOffice is included via fedora-kde-common.ks
+
+## Added for Ansible and JSON Filtering
+python-jmespath
+
+## Added for Hardware Testing and Looking
+lshw
+
+## Added for VSCode Packages
+xclip
+
+## Added for Mlocate replacement for "locate" command
+plocate
+
+## Added for Fedora Remix Tools
+ttyd
+python-qt5
+util-linux-script
+copr-cli
+
+
+## Artur's CLI Utils
+zoxide
+eza
+btop
+bat
+yazi  ## Needs repo
+dust  ## Needs repo
+
+## Networking and Diagnostic Utilities
+nmap 
+iptraf-ng
+wireshark
+fastfetch
+
+## Remote Access
+remmina
+
+## New Tools
+procs
+duf
+httpie
+fd-find
+ripgrep
+fzf
+util-linux
+fio
+f3
+
+## Fedora Remix Packages
+## Comes from COPR Repository
+dyff
+LogViewer
+fedora_remix_tools
+
+%end

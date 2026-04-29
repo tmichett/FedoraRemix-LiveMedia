@@ -1,0 +1,11 @@
+# Container/CI properties for Build_LiveMedia.sh (Podman).
+# Fedora_Remix_Location: host path mounted at /livemedia-creator in the container
+#   (e.g. …/Remix_Builder  →  container:/livemedia-creator  →  ISO under …/FedoraRemix).
+# OCI: ghcr.io/<GitHub_Registry_Owner>/fedora-livemedia-builder:<Fedora_Version>
+# You must build/publish a builder image that runs LiveMedia_Enhanced_Build_Script
+# in /livemedia-creator/FedoraRemix (not the old livecd-creator image).
+Container_Properties:
+  Fedora_Version: "43"
+  SSH_Key_Location: "~/.ssh/github_id"
+  Fedora_Remix_Location: "/home/travis/Remix_Builder"
+  GitHub_Registry_Owner: "tmichett"
