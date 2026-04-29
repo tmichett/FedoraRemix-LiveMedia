@@ -1,0 +1,5 @@
+# Shrink podman build context (workspace is bind-mounted at run time, not COPY'd).
+.git
+**/__pycache__
+*.pyc
+*.pyo
