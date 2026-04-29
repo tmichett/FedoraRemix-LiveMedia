@@ -1,0 +1,40 @@
+title: Fedora Remix LiveMedia
+description: Build bootable live ISOs with livemedia-creator (lorax) — same kickstarts as Fedora Remix
+baseurl: /FedoraRemix-LiveMedia
+url: https://tmichett.github.io
+
+remote_theme: just-the-docs/just-the-docs@v0.10.1
+
+color_scheme: light
+
+permalink: pretty
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - vendor/
+
+aux_links:
+  "Repository":
+    - "https://github.com/tmichett/FedoraRemix-LiveMedia"
+  "Fedora Remix (kickstarts)":
+    - "https://github.com/tmichett/Fedora_Remix"
+
+aux_links_new_tab: true
+
+nav_sort: case_insensitive
+
+heading_anchors: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: "Fedora Remix LiveMedia — livemedia-creator documentation"
+
+ga_tracking: null
+
+kramdown:
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
