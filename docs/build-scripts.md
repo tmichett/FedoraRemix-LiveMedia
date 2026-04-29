@@ -31,7 +31,7 @@ Host preparation: package installs, directories, and parity with container depen
 
 ## `Update_Remix_Config.sh`
 
-Propagates changes from **`config.yml`** into generated or dependent paths where applicable.
+Interactive script that configures both `config.yml` and `Setup/config.yml` in a single pass. Prompts for SSH key path, output directory, GHCR registry owner, Fedora version, and PXE boot inclusion. Press Enter at any prompt to keep the current value. See [Configuration — Update_Remix_Config.sh]({% link docs/configuration.md %}#update_remix_configsh) for the full field reference.
 
 ## Container entrypoint
 
