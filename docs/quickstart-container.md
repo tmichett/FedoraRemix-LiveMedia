@@ -90,7 +90,7 @@ Run the interactive configuration script. It writes to both `config.yml` (contai
 
 The script reminds you: if you pull from `ghcr.io/tmichett/fedora-livemedia-builder`, keep `GitHub_Registry_Owner` set to `tmichett`.
 
-See [Configuration — Update_Remix_Config.sh]({% link docs/configuration.md %}#update_remix_configsh) for the full field reference.
+See [Configuration — Update_Remix_Config.sh]({{ site.baseurl }}{% link docs/configuration.md %}#update_remix_configsh) for the full field reference.
 
 ### Step 3: Verify Configuration (Recommended)
 
@@ -158,7 +158,7 @@ If you need to modify the container itself (add packages, change the entrypoint,
 ./push.sh     # pushes to GHCR (prompts for login)
 ```
 
-See [Building the container]({% link docs/building-container.md %}) for the full walkthrough.
+See [Building the container]({{ site.baseurl }}{% link docs/building-container.md %}) for the full walkthrough.
 
 ---
 
@@ -245,8 +245,8 @@ rm -rf /home/youruser/Remix_Builder/result/images/*.iso
 
 ## See Also
 
-- [Configuration]({% link docs/configuration.md %}) — `config.yml`, `Setup/config.yml`, and `Update_Remix_Config.sh` reference
-- [Building the container]({% link docs/building-container.md %}) — how to build/push the container image
-- [Quickstart (physical)]({% link docs/quickstart-physical.md %}) — building directly on a Fedora host without containers
-- [Build scripts]({% link docs/build-scripts.md %}) — script reference
-- [Troubleshooting]({% link docs/troubleshooting.md %})
+- [Configuration]({{ site.baseurl }}{% link docs/configuration.md %}) — `config.yml`, `Setup/config.yml`, and `Update_Remix_Config.sh` reference
+- [Building the container]({{ site.baseurl }}{% link docs/building-container.md %}) — how to build/push the container image
+- [Quickstart (physical)]({{ site.baseurl }}{% link docs/quickstart-physical.md %}) — building directly on a Fedora host without containers
+- [Build scripts]({{ site.baseurl }}{% link docs/build-scripts.md %}) — script reference
+- [Troubleshooting]({{ site.baseurl }}{% link docs/troubleshooting.md %})

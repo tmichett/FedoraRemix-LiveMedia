@@ -12,7 +12,7 @@ Build a custom Fedora Remix live ISO directly on a **Fedora Linux** machine (phy
 **Build Time:** Approximately 30–60 minutes
 **Output:** A bootable Fedora Remix ISO under `/livemedia-creator/result/images/`
 
-> Looking for the containerized method? See [Quickstart (container)]({% link docs/quickstart-container.md %}).
+> Looking for the containerized method? See [Quickstart (container)]({{ site.baseurl }}{% link docs/quickstart-container.md %}).
 
 ---
 
@@ -115,7 +115,7 @@ This interactive script sets values in both `config.yml` and `Setup/config.yml`:
 
 Press Enter at any prompt to keep the current value in brackets.
 
-See [Configuration — Update_Remix_Config.sh]({% link docs/configuration.md %}#update_remix_configsh) for the full field reference.
+See [Configuration — Update_Remix_Config.sh]({{ site.baseurl }}{% link docs/configuration.md %}#update_remix_configsh) for the full field reference.
 
 #### Step 3: Run the Build
 
@@ -397,7 +397,7 @@ sudo dnf clean all
 
 ## See Also
 
-- [Configuration]({% link docs/configuration.md %}) — `config.yml`, `Setup/config.yml`, and `Update_Remix_Config.sh` reference
-- [Quickstart (container)]({% link docs/quickstart-container.md %}) — building with Podman
-- [Build scripts]({% link docs/build-scripts.md %}) — script reference
-- [Troubleshooting]({% link docs/troubleshooting.md %})
+- [Configuration]({{ site.baseurl }}{% link docs/configuration.md %}) — `config.yml`, `Setup/config.yml`, and `Update_Remix_Config.sh` reference
+- [Quickstart (container)]({{ site.baseurl }}{% link docs/quickstart-container.md %}) — building with Podman
+- [Build scripts]({{ site.baseurl }}{% link docs/build-scripts.md %}) — script reference
+- [Troubleshooting]({{ site.baseurl }}{% link docs/troubleshooting.md %})

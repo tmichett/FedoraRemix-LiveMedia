@@ -71,4 +71,4 @@ The script reads the current values from both config files and displays them as 
 
 **`Verify_Build_LiveMedia.sh`** optionally checks that **`fedora_version`** matches in both YAML files, verifies the **`ghcr.io`** image exists for that version, and can launch **`Build_LiveMedia.sh`**.
 
-See also [Build scripts]({% link docs/build-scripts.md %}).
+See also [Build scripts]({{ site.baseurl }}{% link docs/build-scripts.md %}).

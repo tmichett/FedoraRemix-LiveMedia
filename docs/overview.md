@@ -30,5 +30,5 @@ Fedora Remix LiveMedia produces a **bootable live ISO** using **`livemedia-creat
 
 ## Next steps
 
-- [Quickstart (container)]({% link docs/quickstart-container.md %})
-- [Configuration]({% link docs/configuration.md %})
+- [Quickstart (container)]({{ site.baseurl }}{% link docs/quickstart-container.md %})
+- [Configuration]({{ site.baseurl }}{% link docs/configuration.md %})

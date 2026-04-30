@@ -12,7 +12,7 @@ The Fedora Remix LiveMedia builder runs inside a Podman container based on the s
 ## Prerequisites
 
 - **Podman** installed (`dnf install podman` on Fedora).
-- A configured `config.yml` at the repo root. Run `./Update_Remix_Config.sh` first if this is a fresh clone (see [Configuration]({% link docs/configuration.md %})).
+- A configured `config.yml` at the repo root. Run `./Update_Remix_Config.sh` first if this is a fresh clone (see [Configuration]({{ site.baseurl }}{% link docs/configuration.md %})).
 
 ## 1. Configure the build
 
@@ -28,7 +28,7 @@ To change the Fedora version or registry owner, run:
 ./Update_Remix_Config.sh
 ```
 
-This sets `Fedora_Version`, `GitHub_Registry_Owner`, `SSH_Key_Location`, and `Fedora_Remix_Location` in `config.yml` and keeps `Setup/config.yml` in sync. See [Update_Remix_Config.sh]({% link docs/configuration.md %}#update_remix_configsh) for details.
+This sets `Fedora_Version`, `GitHub_Registry_Owner`, `SSH_Key_Location`, and `Fedora_Remix_Location` in `config.yml` and keeps `Setup/config.yml` in sync. See [Update_Remix_Config.sh]({{ site.baseurl }}{% link docs/configuration.md %}#update_remix_configsh) for details.
 
 ## 2. Build the image
 
@@ -106,4 +106,4 @@ If you don't need to modify the container, skip steps 2–3 and use the publishe
 | `Build_LiveMedia.sh` fails with permission errors | On Linux, the script automatically uses `sudo podman` for loop-device access. Make sure your user has `sudo` privileges. |
 | Container exits immediately | Check `podman logs livemedia-builder` or attach with `-a` flag for interactive troubleshooting. |
 
-See also [Quickstart (container)]({% link docs/quickstart-container.md %}) and [Troubleshooting]({% link docs/troubleshooting.md %}).
+See also [Quickstart (container)]({{ site.baseurl }}{% link docs/quickstart-container.md %}) and [Troubleshooting]({{ site.baseurl }}{% link docs/troubleshooting.md %}).
