@@ -1,7 +1,9 @@
 <script>
 (function() {
-  var saved = localStorage.getItem("jtd-theme");
-  if (saved && saved !== "{{ site.color_scheme | default: 'orange_blue' }}") {
+  var key = "jtd-theme-livemedia";
+  var validThemes = ["orange_blue", "orange_blue_dark"];
+  var saved = localStorage.getItem(key);
+  if (saved && validThemes.indexOf(saved) !== -1 && saved !== "{{ site.color_scheme | default: 'orange_blue' }}") {
     jtd.setTheme(saved);
   }
 })();

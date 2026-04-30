@@ -5,6 +5,7 @@
 
 <script>
 (function() {
+  var key = "jtd-theme-livemedia";
   var defaultTheme = "orange_blue";
   var altTheme = "orange_blue_dark";
   var toggle = document.getElementById("theme-toggle");
@@ -21,14 +22,14 @@
     }
   }
 
-  var saved = localStorage.getItem("jtd-theme") || defaultTheme;
+  var saved = localStorage.getItem(key) || defaultTheme;
   updateLabels(saved);
 
   toggle.addEventListener("click", function() {
-    var current = localStorage.getItem("jtd-theme") || defaultTheme;
+    var current = localStorage.getItem(key) || defaultTheme;
     var next = (current === defaultTheme) ? altTheme : defaultTheme;
     jtd.setTheme(next);
-    localStorage.setItem("jtd-theme", next);
+    localStorage.setItem(key, next);
     updateLabels(next);
   });
 })();
