@@ -1,0 +1,61 @@
+// Custom styles for Fedora Remix LiveMedia
+
+.site-title {
+  color: $blue-300;
+}
+
+.site-header {
+  border-bottom: 2px solid $orange-000;
+}
+
+.main-content {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $blue-300;
+  }
+}
+
+.nav-list .nav-list-item {
+  .nav-list-link.active {
+    color: $orange-000;
+    border-left-color: $orange-000;
+  }
+}
+
+.search-input {
+  border-color: $blue-000;
+
+  &:focus {
+    border-color: $orange-000;
+    box-shadow: 0 0 0 2px rgba($orange-000, 0.2);
+  }
+}
+
+.btn-primary {
+  background-color: $orange-100;
+
+  &:hover,
+  &:focus {
+    background-color: $orange-200;
+  }
+}
+
+a:hover {
+  color: $orange-200;
+}
+
+.aux-nav .aux-nav-list-item a {
+  color: $blue-000;
+
+  &:hover {
+    color: $orange-000;
+  }
+}
+
+blockquote {
+  border-left-color: $orange-000;
+}

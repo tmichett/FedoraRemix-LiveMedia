@@ -1,0 +1,28 @@
+// Orange & Blue color scheme for Fedora Remix LiveMedia
+
+$orange-000: #e8721a;
+$orange-100: #d46518;
+$orange-200: #b85515;
+$orange-300: #9c4610;
+
+$blue-000: #2c6fba;
+$blue-100: #245da0;
+$blue-200: #1d4d88;
+$blue-300: #153a6a;
+
+$color-scheme: light;
+$body-background-color: $white;
+$body-heading-color: $blue-300;
+$body-text-color: $grey-dk-100;
+$link-color: $orange-000;
+$nav-child-link-color: $grey-dk-100;
+$sidebar-color: #edf2f9;
+$base-button-color: #f4f0ec;
+$btn-primary-color: $orange-100;
+$code-background-color: $white;
+$feedback-color: darken($sidebar-color, 3%);
+$table-background-color: $white;
+$search-background-color: $white;
+$search-result-preview-color: $grey-dk-100;
+
+@import "./vendor/accessible-pygments/github-light";
