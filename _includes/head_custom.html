@@ -1,0 +1,8 @@
+<script>
+(function() {
+  var saved = localStorage.getItem("jtd-theme");
+  if (saved && saved !== "{{ site.color_scheme | default: 'orange_blue' }}") {
+    jtd.setTheme(saved);
+  }
+})();
+</script>
