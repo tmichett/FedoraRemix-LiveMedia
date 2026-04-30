@@ -1,4 +1,15 @@
 // Custom styles for Fedora Remix LiveMedia
+//
+// Fallback values so this file compiles safely when a different
+// color scheme (e.g. the built-in dark stylesheet) is active.
+$orange-000: #e8721a !default;
+$orange-100: #d46518 !default;
+$orange-200: #b85515 !default;
+$orange-300: #9c4610 !default;
+$blue-000:   #2c6fba !default;
+$blue-100:   #245da0 !default;
+$blue-200:   #1d4d88 !default;
+$blue-300:   #153a6a !default;
 
 .site-title {
   color: $blue-300;
