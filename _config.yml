@@ -5,6 +5,8 @@ url: https://tmichett.github.io
 
 remote_theme: just-the-docs/just-the-docs@v0.10.1
 
+logo: "/images/fedora_logo_med.png"
+
 color_scheme: orange_blue_dark
 
 permalink: pretty
