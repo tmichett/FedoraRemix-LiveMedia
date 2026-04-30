@@ -5,7 +5,7 @@ url: https://tmichett.github.io
 
 remote_theme: just-the-docs/just-the-docs@v0.10.1
 
-color_scheme: orange_blue
+color_scheme: orange_blue_dark
 
 permalink: pretty
 
@@ -14,11 +14,12 @@ exclude:
   - Gemfile.lock
   - LICENSE
   - vendor/
+  - Setup/
 
 aux_links:
   "Repository":
     - "https://github.com/tmichett/FedoraRemix-LiveMedia"
-  "Fedora Remix (kickstarts)":
+  "Fedora Remix (Original Project)":
     - "https://github.com/tmichett/Fedora_Remix"
 
 aux_links_new_tab: true

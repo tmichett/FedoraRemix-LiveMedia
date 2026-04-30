@@ -1,24 +1,24 @@
 <button class="theme-toggle btn btn-outline" id="theme-toggle" aria-label="Toggle light/dark theme">
-  <span id="theme-toggle-light" title="Switch to dark theme">&#9788; Light</span>
-  <span id="theme-toggle-dark" title="Switch to light theme" style="display:none;">&#9790; Dark</span>
+  <span id="theme-toggle-dark" title="Switch to light theme">&#9790; Dark</span>
+  <span id="theme-toggle-light" title="Switch to dark theme" style="display:none;">&#9788; Light</span>
 </button>
 
 <script>
 (function() {
   var key = "jtd-theme-livemedia";
-  var defaultTheme = "orange_blue";
-  var altTheme = "orange_blue_dark";
+  var defaultTheme = "orange_blue_dark";
+  var altTheme = "orange_blue";
   var toggle = document.getElementById("theme-toggle");
   var darkLabel = document.getElementById("theme-toggle-dark");
   var lightLabel = document.getElementById("theme-toggle-light");
 
   function updateLabels(current) {
     if (current === altTheme) {
-      darkLabel.style.display = "inline";
-      lightLabel.style.display = "none";
-    } else {
       darkLabel.style.display = "none";
       lightLabel.style.display = "inline";
+    } else {
+      darkLabel.style.display = "inline";
+      lightLabel.style.display = "none";
     }
   }
 

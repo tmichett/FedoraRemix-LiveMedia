@@ -3,7 +3,7 @@
   var key = "jtd-theme-livemedia";
   var validThemes = ["orange_blue", "orange_blue_dark"];
   var saved = localStorage.getItem(key);
-  if (saved && validThemes.indexOf(saved) !== -1 && saved !== "{{ site.color_scheme | default: 'orange_blue' }}") {
+  if (saved && validThemes.indexOf(saved) !== -1 && saved !== "{{ site.color_scheme | default: 'orange_blue_dark' }}") {
     jtd.setTheme(saved);
   }
 })();
